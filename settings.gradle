@@ -1,0 +1,3 @@
+rootProject.name = 'otus-microservices'
+include 'hw01-docker'
+
