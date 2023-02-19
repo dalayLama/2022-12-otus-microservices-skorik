@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-otus-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-otus
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: hello-otus
+    spec:
+      containers:
+        - image: dalaylama/hello-otus:latest
+          name: hello-otus
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 10
